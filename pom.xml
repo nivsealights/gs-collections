@@ -266,7 +266,7 @@
                         </includes>
                         <argLine>-XX:-OmitStackTraceInFastThrow</argLine>
                         <runOrder>random</runOrder>
-                        <forkMode>never</forkMode>
+                        <!--<forkMode>never</forkMode>-->
                     </configuration>
                 </plugin>
 
