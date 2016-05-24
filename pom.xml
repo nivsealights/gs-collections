@@ -113,6 +113,14 @@
                 <scope>test</scope>
             </dependency>
 
+            <!-- Sealights Agent -->
+<dependency>
+<groupId>io.sealights.on-premise.agents</groupId>
+<artifactId>java-agent-api</artifactId>
+<version>1.0.0-SNAPSHOT</version>
+<scope>test</scope>
+</dependency>
+
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
@@ -266,7 +274,29 @@
                         <includes>
                             <include>**/*Test.java</include>
                         </includes>
-                        <argLine>-XX:-OmitStackTraceInFastThrow</argLine>
+
+                        <additionalClasspathElements>
+                            <additionalClasspathElement>
+                                D:\dev\gitHub_clones\platform\sealights\sl-api-1.3.176.jar
+                            </additionalClasspathElement>
+                        </additionalClasspathElements>
+
+                        <argLine>
+                            -XX:-OmitStackTraceInFastThrow
+                            -Dsl.log.enabled=true -Dsl.log.toFile=true -Dsl.log.level=debug -Dsl.log.folder="D:\logs\logs"
+                            -Dsl.config.file="D:\dev\gitHub_clones\platform\sealights.json" 
+                            -javaagent:"D:\dev\gitHub_clones\platform\sealights\sl-test-listener-1.3.176.jar"
+                        </argLine>
+
+                        <properties>
+                            <property>
+                                <name>listener</name>
+                                <value>
+                                    io.sealights.onpremise.agents.java.agent.integrations.testng.TestListener
+                                </value>
+                            </property>
+                        </properties>
+
                         <runOrder>random</runOrder>
                         <!--<forkMode>never</forkMode>-->
                     </configuration>
