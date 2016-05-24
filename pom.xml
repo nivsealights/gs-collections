@@ -99,8 +99,6 @@
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
         <sonar.core.codeCoveragePlugin>clover</sonar.core.codeCoveragePlugin>
         <sonar.clover.version>${clover.version}</sonar.clover.version>
-        <!-- jacoco -->
-        <maven.jacoco.plugin.version>0.7.5.201505241946</maven.jacoco.plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -112,14 +110,6 @@
                 <version>4.12</version>
                 <scope>test</scope>
             </dependency>
-
-            <!-- Sealights Agent -->
-<dependency>
-<groupId>io.sealights.on-premise.agents</groupId>
-<artifactId>java-agent-api</artifactId>
-<version>1.0.0-SNAPSHOT</version>
-<scope>test</scope>
-</dependency>
 
             <dependency>
                 <groupId>org.slf4j</groupId>
@@ -274,29 +264,7 @@
                         <includes>
                             <include>**/*Test.java</include>
                         </includes>
-
-                        <additionalClasspathElements>
-                            <additionalClasspathElement>
-                                D:\dev\gitHub_clones\platform\sealights\sl-api-1.3.176.jar
-                            </additionalClasspathElement>
-                        </additionalClasspathElements>
-
-                        <argLine>
-                            -XX:-OmitStackTraceInFastThrow
-                            -Dsl.log.enabled=true -Dsl.log.toFile=true -Dsl.log.level=debug -Dsl.log.folder="D:\logs\logs"
-                            -Dsl.config.file="D:\dev\gitHub_clones\platform\sealights.json" 
-                            -javaagent:"D:\dev\gitHub_clones\platform\sealights\sl-test-listener-1.3.176.jar"
-                        </argLine>
-
-                        <properties>
-                            <property>
-                                <name>listener</name>
-                                <value>
-                                    io.sealights.onpremise.agents.java.agent.integrations.testng.TestListener
-                                </value>
-                            </property>
-                        </properties>
-
+                        <argLine>-XX:-OmitStackTraceInFastThrow</argLine>
                         <runOrder>random</runOrder>
                         <!--<forkMode>never</forkMode>-->
                     </configuration>
@@ -419,57 +387,6 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
-            </plugin>
-
-            <!-- jacoco -->
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>${maven.jacoco.plugin.version}</version>
-
-                <executions>
-                    <!-- Prepares the property pointing to the JaCoCo runtime agent which 
-                        is passed as VM argument when Maven the Surefire plugin is executed. -->
-                    <execution>
-                        <id>pre-unit-test</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                        <configuration>
-                            <!-- Sets the path to the file which contains the execution data. -->
-                            <destFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</destFile>
-                            <!-- Sets the name of the property containing the settings for JaCoCo 
-                                runtime agent. -->
-                            <propertyName>surefireArgLine</propertyName>
-                        </configuration>
-                    </execution>
-                    <!-- Ensures that the code coverage report for unit tests is created 
-                        after unit tests have been run. -->
-                    <execution>
-                        <id>post-unit-test</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                        <configuration>
-                            <!-- Sets the path to the file which contains the execution data. -->
-                            <dataFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</dataFile>
-                            <!-- Sets the output directory for the code coverage report. -->
-                            <outputDirectory>${project.reporting.outputDirectory}/jacoco-ut</outputDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.19</version>
-
-                <configuration>
-                    <argLine>${surefireArgLine}</argLine>
-                </configuration>
-
             </plugin>
 
             <plugin>
